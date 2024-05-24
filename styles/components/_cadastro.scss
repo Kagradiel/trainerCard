@@ -1,0 +1,312 @@
+@use '../abstract/mixins';
+@use '../abstract/variaveis';
+
+
+.isActive{
+    transition-property: border-color, color;
+    transition-duration: 1s;
+    color: variaveis.$cor-clara;
+    border-color: variaveis.$cor-clara !important;
+}
+
+.principalCadastro{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3.5vh;
+    padding: 6vh 0;
+    border-radius: 0 0 40px 40px;
+    div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        h1{
+            @include mixins.font-size-color(variaveis.$fonte-titulo, 1rem, variaveis.$cor-fundo-claro);
+            width: 70vw;
+            text-align: center;
+        }
+        ul{
+            @include mixins.font-size-color(variaveis.$fonte-textos, .7rem, variaveis.$cor-tema-vermelho);
+            display: flex;
+            li{
+                width: 15vw;
+                padding: .3vh 2vw;
+                border-top: 1px solid variaveis.$cor-tema-vermelho;
+                margin: 1vh 0;
+                text-align: center;
+                
+            }
+        }
+    }
+    
+    form{
+        
+        fieldset{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            label{
+                @include mixins.font-size-color(variaveis.$fonte-textos, 1rem, variaveis.$cor-clara)
+            }
+            select,
+            input{
+                width: 70vw;
+                height: 2vh;
+                border-radius: 12px;
+                border: none;
+                background-color: variaveis.$cor-clara;
+                box-shadow: inset 0px  5px 4px #bfbdbd,
+                            inset 0px -5px 4px #f2f2f2;
+                @include mixins.font-size-color(variaveis.$fonte-textos, 1rem, variaveis.$cor-transparencia-vermelho);
+                opacity: 1; //firefox
+                padding: 7px;
+                font-weight: 600;
+                text-align: center;
+            }
+            select,
+            input:focus{
+                outline:none;
+            }
+            select{
+                width: 73vw;
+                height: 4vh;
+                margin-bottom: 1.5vh;
+            }
+            span{
+                @include mixins.font-size-color(variaveis.$fonte-textos, .7rem, variaveis.$cor-fundo-claro);
+                margin-bottom: 1.5vh;
+                margin-top: -1.2vh;
+            }
+
+        }
+    }
+
+    .containerBotoes{
+        margin-top: 2vh;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        width: 74vw;
+        justify-content: space-between;
+    }
+    
+}
+
+.botaoCadastro{
+    margin: 0 !important;
+    @include mixins.font-size-color(variaveis.$fonte-textos, 1rem, variaveis.$cor-tema-vermelho);
+    background-color: variaveis.$cor-fundo-claro;
+    border: 0;
+    width: 30vw;
+    height: 3.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 27px;
+    font-weight: 800;
+}
+
+.botaoCadastro:hover{
+    background-color: variaveis.$cor-tema-vermelho;
+    color: variaveis.$cor-fundo-claro;
+}
+
+.formularioDeInformacoesPessoais{
+    fieldset{
+        gap: 2vh;
+    }
+}
+
+.formularioDeRegistroDeCidadania{
+    margin-top: 8vh;
+    fieldset{
+        margin-top: 1vh;
+        gap: 2vh;
+    }
+    fieldset:nth-child(3){
+        margin-bottom: 13vh;
+    }
+}
+
+@media screen and (min-width: 768px){
+    
+    .principalCadastro{
+        .containerAvanco{
+            h1{
+                font-size: 1.2rem;
+            }
+            ul{
+                li{
+                    font-size: 1rem;
+                }
+            }
+        }
+    }    
+
+    .principalCadastro{
+        gap: 7vh;
+        form{
+            fieldset{
+                input{
+                    width: 50vw;
+                }
+                
+                select{
+                    width: 52vw;
+                }
+            }
+        }
+    }
+
+    .containerBotoes{
+        justify-content: space-evenly !important;
+    }
+
+    .botaoCadastro{
+        width: 20vw;
+    }
+
+}
+
+@media screen and (min-width: 1024px) and (orientation: landscape) {
+
+    #nomeCadastro{
+        grid-area: nome;
+    }
+    #usuarioCadastro{
+        grid-area: usuario;
+    }
+    #senhaCadastro{
+        grid-area: senha;
+    }
+    #dataCadastro{
+        grid-area: data;
+    }
+    #linguaCadastro{
+        grid-area: lingua;
+    }
+    #linguaCadastro{
+        grid-area: lingua;
+    }
+    .containerBotoes{
+        grid-area: botoes;
+    }
+    #cidadeCadastro{
+        grid-area: cidade;
+    }
+    #regiaoCadastro{
+        grid-area: regiao;
+    }
+    #tipoCadastro{
+        grid-area: tipo;
+    }
+    #emailCadastro{
+        grid-area: email;
+    }
+    .tituloCampo{
+        grid-area: titulo;
+    }
+    .dadosDoCampo{
+        grid-area: dados;
+    }
+    .mensagensDeErro{
+        grid-area: erro;
+    }
+
+
+    .principalCadastro{
+        width: 90vw;
+        .containerAvanco{
+            flex-direction: row;
+            justify-content: space-between;
+            width: 80vw;
+            h1{
+                width: 20vw;
+            }
+            ul{
+                li{
+                    font-size: .8rem;
+                    width: 8vw;
+                }
+            }
+        }
+
+        form{
+            
+            fieldset{
+                display: grid;
+                grid-area: 10vh 10vh/ 35vw 35vw;
+                grid-template-areas:
+                "titulo dados"
+                ". erro"
+                ;
+                justify-content: space-between;
+                label{
+                    width: 12vw;
+                }
+                select{
+                    width: 21.3vw;
+                    height: 5vh;
+                    margin-right: 0;
+                }
+                input{
+                    width: 20vw;
+                    height: 3vh;
+                }
+                span{
+                   position: fixed;
+                   padding-top: 5.3vw;
+                }    
+            }
+            
+        }
+
+        .containerBotoes{
+            width: 70vw;
+            gap: 30vw;
+            margin-top: 3vh;
+        }
+    }
+    
+        .formularioDeInformacoesPessoais{
+            display: grid;
+            grid-template: 10vh 10vh 10vh 10vh 10vh / 35vw 35vw;
+            grid-template-areas:
+                "nome nome"
+                "usuario senha"
+                "data lingua"
+                "email email"
+                "botoes botoes";
+            justify-content: center;
+            align-items: center;
+            gap: 1vh 1vw;
+            margin-top: 6vh;
+            fieldset:nth-child(1),
+            fieldset:nth-child(6){
+                
+                input{
+                    width: 56vw;
+                }
+            }
+        }
+
+        .formularioDeRegistroDeCidadania{
+            display: grid;
+            grid-template: 10vh 10vh 10vw/ 35vw 35vw;
+            grid-template-areas:
+                "regiao cidade"
+                "tipo   .     "
+                "botoes botoes";
+            gap: 1vh 1vw;
+            margin-top: 10vh;
+            fieldset{
+                margin-top: 0;
+                gap: 2vh;
+            }
+            fieldset:nth-child(3){
+                margin-bottom: 0;
+            }
+        }
+
+}

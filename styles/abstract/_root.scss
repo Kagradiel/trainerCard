@@ -1,0 +1,36 @@
+@use './variaveis';
+
+
+
+body{
+    background-color: variaveis.$cor-fundo-claro;
+    max-width: 100vw;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+main{
+    background-color: variaveis.$cor-transparencia-vermelho;
+    height: auto;
+    min-height: 84vh;
+    border-radius: 0 0 30px 30px;
+    box-shadow: inset 0px  -4px 11px #d06161,
+                inset 0px  -4px 11px #774242;
+}
+
+a{ 
+    text-decoration: none; 
+} 
+
+::selection{
+    background-color: variaveis.$cor-fundo-claro;
+    color: variaveis.$cor-tema-vermelho;
+}
+
+@media screen and (min-width: 1024px) and (orientation: portrait){
+    body{
+        background-color: variaveis.$cor-fundo-claro;
+        max-width: 90vw;
+        width: 90vw;
+    }
+}

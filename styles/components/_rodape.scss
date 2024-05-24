@@ -1,0 +1,39 @@
+@use '../abstract/mixins';
+@use '../abstract/variaveis';
+
+footer{
+    display: flex;
+    flex-direction: column;
+    p{
+        @include mixins.font-size-color(variaveis.$fonte-textos, 0.8rem, variaveis.$cor-preto);
+        padding: 2vw;
+        
+    }
+    a{
+        @include mixins.font-size-color(variaveis.$fonte-textos, 1.1rem, variaveis.$cor-tema-vermelho);
+        align-self: flex-end;
+        padding: 0 8vw 0 0;
+        font-weight: 700;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    
+    footer{
+        height: 13vh;
+        width: 96vw;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        p{
+            align-self: center;
+            text-align: right;
+            width: 57vw;
+            font-size: .9rem;
+            padding-right: 0;
+        }
+        a{
+            padding-left: 2vw;
+            align-self: center;
+        }
+    }
+}
