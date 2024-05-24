@@ -2,7 +2,7 @@ import { adicionaLinguas, adicionaSegundaPagina} from "./addContent.js";
 import { filtrarFormulario } from "./filtroDeFormulario.js";
 import { salvarDados } from "./salvarDados.js";
 
-let   pagina            = 3;
+let   pagina            = 1;
 
 criarBaseDoFormulario(pagina);
 
