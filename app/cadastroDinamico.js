@@ -2,7 +2,7 @@ import { adicionaLinguas, adicionaSegundaPagina} from "./addContent.js";
 import { filtrarFormulario } from "./filtroDeFormulario.js";
 import { salvarDados } from "./salvarDados.js";
 
-let   pagina            = 1;
+let   pagina            = 3;
 
 criarBaseDoFormulario(pagina);
 
@@ -186,16 +186,18 @@ function criarTerceiroFormulario(){
     main.innerHTML=
     `
         <section class="fotoPerfil">
-            <h2> Escolha a imagem de perfil</h2>
-            <ul>
-                <li>
-                    <button>Tirar Foto</button>
-                </li>
-                <li>
-                    <button>Usar imagem padrão</button>
-                </li>
-            </ul>
-            <button>Cancelar</button>
+            <div>
+                <h2> Escolha a imagem de perfil</h2>
+                <ul>
+                    <li>
+                        <button>Tirar Foto</button>
+                    </li>
+                    <li>
+                        <button>Usar imagem padrão</button>
+                    </li>
+                </ul>
+                <button>Cancelar</button>
+            </div>
         </section>
         
     `
