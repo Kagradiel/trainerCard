@@ -77,6 +77,19 @@ a {
   color: #CA5959;
 }
 
+::-webkit-scrollbar {
+  width: 9px;
+  border-radius: 600px;
+}
+
+::-webkit-scrollbar-track {
+  background: #CA5959;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FEF5EA;
+}
+
 @media screen and (min-width: 1024px) and (orientation: portrait) {
   body {
     background-color: #FEF5EA;
@@ -574,6 +587,6 @@ footer a {
     width: 18vw;
   }
   .fotoPerfil div button:nth-child(3) {
-    width: 10vw;
+    width: 7vw;
   }
 }/*# sourceMappingURL=style.css.map */

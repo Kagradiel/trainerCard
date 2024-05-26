@@ -2,11 +2,14 @@ import { adicionaLinguas, adicionaSegundaPagina} from "./addContent.js";
 import { filtrarFormulario } from "./filtroDeFormulario.js";
 import { salvarDados } from "./salvarDados.js";
 
-let   pagina            = 3;
 
-criarBaseDoFormulario(pagina);
+criarBaseDoFormulario();
 
-function criarBaseDoFormulario(pagina){
+function criarBaseDoFormulario(){
+    let estadoFormulario = {
+        paginaAtual: 1, // Inicia na página 1
+        dados: {} // Objeto para armazenar os dados do formulário
+    };
     const main = document.querySelector("main");
     main.innerHTML=
     `
@@ -28,53 +31,55 @@ function criarBaseDoFormulario(pagina){
 
     </section>
     `
-    exibirFormulario(pagina);
+    console.log(estadoFormulario);
+    exibirFormulario(estadoFormulario);
 }
 
-function avancarOuRetornar(){
+function avancarOuRetornar(estadoFormulario){
     const formulario        = document.querySelector("[data-formulario]");
     const cancelar          = document.querySelector("[data-cancelar]");
-    
+    console.log(estadoFormulario);
     
     formulario.addEventListener('submit', (dados) =>{
-        salvarDados(dados, pagina);
-        if(pagina >= 3){
-            return
+        salvarDados(dados, estadoFormulario.paginaAtual, estadoFormulario);
+        if(estadoFormulario.paginaAtual >= 3){
+            return;
         }else{
-            pagina += 1;
+            estadoFormulario.paginaAtual += 1;
+            exibirFormulario(estadoFormulario);
+            recuperarInfo(estadoFormulario);
         }
-        exibirFormulario();
-        recuperarInfo();
-        
     });
 
     cancelar.addEventListener('click', () =>{
-        console.log(pagina);
-        if(pagina == 1){
-            return
-        }else if(pagina <= 3){
-            pagina -= 1;
-            exibirFormulario();
-            recuperarInfo();
+        if(estadoFormulario.paginaAtual == 1){
+            return;
+        }else if(estadoFormulario.paginaAtual <= 3){
+            estadoFormulario.paginaAtual -= 1;
+            exibirFormulario(estadoFormulario);
+            recuperarInfo(estadoFormulario);
         }
-    })
+    });
 }
 
-function exibirFormulario(){
-    console.log(pagina);
-    if(pagina == 1 ){
-        criarPrimeiroFormulario();
-    }else if(pagina == 2){
-        criarSegundoFormulario();
+function exibirFormulario(estadoFormulario){
+    const paginaAtual = estadoFormulario.paginaAtual;
+    
+    if(paginaAtual === 1 ){
+        criarPrimeiroFormulario(estadoFormulario);
+    }else if(paginaAtual === 2){
+        criarSegundoFormulario(estadoFormulario);
     }else{
-        criarTerceiroFormulario();
+        criarTerceiroFormulario(estadoFormulario);
     }
 }
 
-async function criarPrimeiroFormulario(){
+
+async function criarPrimeiroFormulario(estadoFormulario){
     const formulario        = document.querySelector("[data-formulario]");
     const indiceFormulario  = document.querySelectorAll("[data-etapa]");
-    pagina = 1;
+
+
 
     indiceFormulario[1].classList.remove('isActive');
     formulario.innerHTML='';
@@ -131,16 +136,16 @@ async function criarPrimeiroFormulario(){
 
         `;
 
-    adicionaLinguas();
+    await adicionaLinguas();
     filtrarFormulario() 
-    avancarOuRetornar();
+    avancarOuRetornar(estadoFormulario);
 }
 
-async function criarSegundoFormulario(){
+async function criarSegundoFormulario(estadoFormulario){
     const formulario        = document.querySelector("[data-formulario]");
     const indiceFormulario  = document.querySelectorAll("[data-etapa]");
 
-    pagina = 2;
+
     indiceFormulario[1].classList.add('isActive');
     formulario.innerHTML='';
     formulario.classList.remove('formularioDeInformacoesPessoais');
@@ -175,14 +180,14 @@ async function criarSegundoFormulario(){
         </div>
     `
     ;
+
     adicionaSegundaPagina();
-    avancarOuRetornar();
+    avancarOuRetornar(estadoFormulario);
 }
 
-function criarTerceiroFormulario(){
+function criarTerceiroFormulario(estadoFormulario){
     const main = document.querySelector("main");
-    pagina = 3;
-
+    
     main.innerHTML=
     `
         <section class="fotoPerfil">
@@ -201,36 +206,29 @@ function criarTerceiroFormulario(){
         </section>
         
     `
+
+    avancarOuRetornar(estadoFormulario);
+
 }
 
-function recuperarInfo(){
+function recuperarInfo(estadoFormulario){
     let info = [];
-    console.log(pagina);
-    if(pagina == 1){
+    console.log(estadoFormulario.paginaAtual);
+    if(estadoFormulario.paginaAtual == 1){
         info  = JSON.parse(localStorage.getItem('Informações pessoais')) || [];
-    }else if(pagina == 2){
+    }else if(estadoFormulario.paginaAtual == 2){
         info  = JSON.parse(localStorage.getItem('Registro de cidadania')) || [];
-    }else{
-        return
     }
 
     const form = document.querySelectorAll(".dadosDoCampo");
 
-        Object.entries(info).forEach(([key, value]) => {
 
-            form.forEach(campo => {
-
-                /*if(campo.name === "lang"){
-                    
-
-                }
-                else*/ 
-                if(`${key}` == campo.name){
-                    campo.value = `${value}`;
-                }
-
-            })
-
+    Object.entries(info).forEach(([key, value]) => {
+        form.forEach(campo => {
+            if(campo.name === key){
+                campo.value = value;
+            }
         });
+    });
 }
 
