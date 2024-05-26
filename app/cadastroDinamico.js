@@ -7,7 +7,7 @@ criarBaseDoFormulario();
 
 function criarBaseDoFormulario(){
     let estadoFormulario = {
-        paginaAtual: 1, // Inicia na página 1
+        paginaAtual: 3, // Inicia na página 1
         dados: {} // Objeto para armazenar os dados do formulário
     };
     const main = document.querySelector("main");
@@ -40,21 +40,30 @@ function avancarOuRetornar(estadoFormulario){
     const cancelar          = document.querySelector("[data-cancelar]");
     console.log(estadoFormulario);
     
-    formulario.addEventListener('submit', (dados) =>{
-        salvarDados(dados, estadoFormulario.paginaAtual, estadoFormulario);
-        if(estadoFormulario.paginaAtual >= 3){
-            return;
-        }else{
-            estadoFormulario.paginaAtual += 1;
-            exibirFormulario(estadoFormulario);
-            recuperarInfo(estadoFormulario);
-        }
-    });
+    if(formulario){
+
+        formulario.addEventListener('submit', (dados) =>{
+            salvarDados(dados, estadoFormulario);
+            if(estadoFormulario.paginaAtual >= 3){
+                return;
+            }else{
+                estadoFormulario.paginaAtual += 1;
+                exibirFormulario(estadoFormulario);
+                recuperarInfo(estadoFormulario);
+            }
+        });
+    }
 
     cancelar.addEventListener('click', () =>{
-        if(estadoFormulario.paginaAtual == 1){
+        if(estadoFormulario.paginaAtual === 1){
             return;
-        }else if(estadoFormulario.paginaAtual <= 3){
+        }else if(estadoFormulario.paginaAtual <= 3) {
+            if(estadoFormulario.paginaAtual == 3){
+                const formImgDePerfil = document.querySelector(".fotoPerfil");
+                    formImgDePerfil.classList.remove("fotoPerfil");
+                    formImgDePerfil.innerHTML="";
+                }
+            
             estadoFormulario.paginaAtual -= 1;
             exibirFormulario(estadoFormulario);
             recuperarInfo(estadoFormulario);
@@ -63,11 +72,11 @@ function avancarOuRetornar(estadoFormulario){
 }
 
 function exibirFormulario(estadoFormulario){
-    const paginaAtual = estadoFormulario.paginaAtual;
+;
     
-    if(paginaAtual === 1 ){
+    if(estadoFormulario.paginaAtual === 1 ){
         criarPrimeiroFormulario(estadoFormulario);
-    }else if(paginaAtual === 2){
+    }else if(estadoFormulario.paginaAtual === 2){
         criarSegundoFormulario(estadoFormulario);
     }else{
         criarTerceiroFormulario(estadoFormulario);
@@ -188,10 +197,11 @@ async function criarSegundoFormulario(estadoFormulario){
 function criarTerceiroFormulario(estadoFormulario){
     const main = document.querySelector("main");
     
-    main.innerHTML=
+    main.innerHTML +=
     `
         <section class="fotoPerfil">
             <div>
+                <button id="cancelar" data-cancelar>X</button>
                 <h2> Escolha a imagem de perfil</h2>
                 <ul>
                     <li>
@@ -201,7 +211,6 @@ function criarTerceiroFormulario(estadoFormulario){
                         <button>Usar imagem padrão</button>
                     </li>
                 </ul>
-                <button>Cancelar</button>
             </div>
         </section>
         

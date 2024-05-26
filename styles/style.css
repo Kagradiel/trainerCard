@@ -524,6 +524,7 @@ footer a {
   }
 }
 .fotoPerfil {
+  margin-top: -30vh;
   height: 100vh;
   position: absolute;
   width: 100vw;
@@ -542,7 +543,7 @@ footer a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   box-shadow: 5px 0px 30px #9e4949, -5px 0px 30px #c85555;
 }
 .fotoPerfil div h2 {
@@ -551,11 +552,13 @@ footer a {
   color: #FEF5EA;
   width: 50vw;
   text-align: center;
+  margin-top: -20vh;
 }
 .fotoPerfil div ul {
   display: flex;
   gap: 8vw;
-  margin-top: -5vh;
+  margin-top: -20vh;
+  margin-bottom: 10vh;
 }
 .fotoPerfil div button {
   width: 30vw;
@@ -572,21 +575,34 @@ footer a {
 .fotoPerfil div button:hover {
   box-shadow: none;
 }
+.fotoPerfil div #cancelar {
+  width: 8vw;
+  height: 8vw;
+  font-weight: 800;
+  margin-top: 4vh;
+}
 
 @media screen and (min-width: 1024px) and (orientation: landscape) {
+  .fotoPerfil {
+    margin-top: -87vh;
+  }
   .fotoPerfil div {
     width: 55vw;
     height: 75vh;
   }
+  .fotoPerfil div h2 {
+    margin-top: -15vh;
+  }
   .fotoPerfil div ul {
     margin-top: 0;
-    margin-bottom: -5vw;
+    margin-bottom: 13vh;
   }
   .fotoPerfil div button {
     font-size: 0.8em;
     width: 18vw;
   }
-  .fotoPerfil div button:nth-child(3) {
-    width: 7vw;
+  .fotoPerfil div #cancelar {
+    width: 3vw;
+    height: 3vw;
   }
 }/*# sourceMappingURL=style.css.map */
