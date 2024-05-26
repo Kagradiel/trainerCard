@@ -19,13 +19,11 @@ export async function buscaLinguagensValidas(){
 //Adiciono linguas com tradução de elementos na primeira pagina
 export async function adicionaLinguas(){
 
-    const   linguas             = document.querySelector("[data-lingua]"); 
-    const   linguasArray        = await buscaLinguagensValidas();
-    let     linguaEscolhida     = linguasArray[8];
-    let     info                = [];
-    
-    info  = JSON.parse(localStorage.getItem('Informações pessoais')) || [];
+    const linguasArray = await buscaLinguagensValidas();
+    let   linguaEscolhida   = linguasArray[8];
 
+    const linguas = document.querySelector("[data-lingua]"); 
+    
     linguas.innerHTML += 
             `
                 <option value="13">Portugues</option>
@@ -36,112 +34,117 @@ export async function adicionaLinguas(){
         const variavelDePesquisa = 'language/'+lingua;
         
         const resultado = await consultaApi(variavelDePesquisa);
-        
+
+        let i = 0;
         
             resultado.names.forEach( nome =>{
+                
                 if(resultado.official == true && nome.language.name == linguaEscolhida){
-                    addOuRecuperaSelects(info, "lang", resultado.id, linguas, nome.name);
+                    linguasArray[i] = nome.name;
+                    linguas.innerHTML += 
+                    `
+                        <option value="${resultado.id}">${linguasArray[i]}</option>
+                    `
+                    i++;
                 }
             })
         }
     )}
 
-export async function adicionaSegundaPagina(){   
+export function adicionaSegundaPagina(){   
     const regiao = document.querySelector("[data-regiao]"); 
-    let     info                = [];
-
-    info  = JSON.parse(localStorage.getItem('Registro de cidadania')) || [];
     
-    await adicionarRegiao(regiao, info);
-    await adicionaTipo(info);
+    adicionarRegiao(regiao);
+    adicionaTipo();
 
-    regiao.addEventListener('change', async () => {
-        await adicionaCidade(regiao, info);
+    regiao.addEventListener('change', () => {
+        adicionaCidade(regiao);
     })
 }
 
-async function adicionarRegiao(regiao, info){
-    const   variavelDePesquisa  = 'region';
-    const   resultado           = await consultaApi(variavelDePesquisa);
+async function adicionarRegiao(regiao){
+    const variavelDePesquisa   = 'region';
+    const resultado         = await consultaApi(variavelDePesquisa);
+    let i = 1;
     
     
-    
-
     resultado.results.forEach( nome =>{
         //removendo hisui temporariamente devido a dificuldade de achar nomes de cidades
-        if(nome.name != 'hisui' && nome.name != 'galar' && nome.name != 'paldea'){
-                
-            addOuRecuperaSelects(info, "regiao", acharIdPeloUrl(nome), regiao, nome.name);
-
+        //valor de paldea aumentado para sincronia com a descoberta de cidade devido a remoção de hisui
+        if(nome.name != 'hisui'){
+            if(nome.name != 'paldea'){
+                regiao.innerHTML +=
+                `
+                    <option value="${i}">${nome.name}</option> 
+                `
+                i++;
+            }else{
+                regiao.innerHTML +=
+                `
+                    <option value="${i+1}">${nome.name}</option> 
+                `
+                i++;
+            }
         }
     })
-    await adicionaCidade(regiao, info);
+    adicionaCidade(regiao);
 }
 
-async function adicionaCidade(regiao, info){
+async function adicionaCidade(regiao){
     const cidade                = document.querySelector("[data-cidade]");
     const variavelDePesquisa    = `region/${regiao.value}`;
     const resultado             =  await consultaApi(variavelDePesquisa);
+    let   i                     =  1;
     cidade.innerHTML='';
+
+
+    if(regiao.value <= 7){
 
         resultado.locations.forEach( e =>{        
             
             if(e.name.includes("city") || e.name.includes("town")){
                 let city = e.name.replaceAll("-", ' ')
-                addOuRecuperaSelects(info, "cidade", acharIdPeloUrl(e), cidade, city);
+                cidade.innerHTML +=
+                `
+                    <option value="${i}">${city}</option>
+                `
+                i++;
+
+
             }
         })
 
+    }else{
+
+        resultado.locations.forEach( city =>{        
+            
+            if(city.name.indexOf("-") ==  -1){
+                cidade.innerHTML +=
+                `
+                    <option value="${i}">${city.name}</option>
+                `
+                i++;
+
+            }
+        })
+
+    }
 }
 
-async function adicionaTipo(info){
-    const tipo                  = document.querySelector("[data-tipo]");
-    const variavelDePesquisa    = "type";
-    const resultado             = await consultaApi(variavelDePesquisa);
+async function adicionaTipo(){
+    const tipo              = document.querySelector("[data-tipo]");
+    const variavelDePesquisa   = "type";
+    const resultado         = await consultaApi(variavelDePesquisa);
+    let i = 1;
   
 
     resultado.results.forEach( type =>{
-
-        addOuRecuperaSelects(info, "tipo", acharIdPeloUrl(type), tipo, type.name);
+        
+        tipo.innerHTML +=
+        `
+            <option value="${i}">${type.name}</option>
+        `
+        i++;
          
     })
-}
-
-function addOuRecuperaSelects(info, variavelEspecifica, id, campo, opcoes){
-
-
-    if(info != []){
-        Object.entries(info).forEach(([key, value]) => {
-            if(key == variavelEspecifica){
-                if(value == id){
-                    campo.innerHTML += 
-                    `
-                    <option value="${id}" selected>${opcoes}</option>
-                    `;
-                    
-                    
-                }     
-                else{
-                    campo.innerHTML += 
-                    `
-                        <option value="${id}">${opcoes}</option>
-                    `;
-                }   
-            }
-        })
-    }
-    else{
-        campo.innerHTML += 
-        `
-            <option value="${id}">${opcoes}</option>
-        `;
-    }   
-}
-
-function acharIdPeloUrl(variavel){
-    return  variavel.url
-            .split("")
-            .reverse()
-            .join("")
-            .split("/", 2)[1];
 }

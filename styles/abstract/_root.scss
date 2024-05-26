@@ -27,20 +27,6 @@ a{
     color: variaveis.$cor-tema-vermelho;
 }
 
-::-webkit-scrollbar {
-    width: 9px;
-    border-radius: 600px;
-}
-
-::-webkit-scrollbar-track {
-    background: variaveis.$cor-tema-vermelho;
-}
-
-::-webkit-scrollbar-thumb {
-    background: variaveis.$cor-fundo-claro;
-}
-
-
 @media screen and (min-width: 1024px) and (orientation: portrait){
     body{
         background-color: variaveis.$cor-fundo-claro;

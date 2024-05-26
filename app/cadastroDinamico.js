@@ -2,14 +2,11 @@ import { adicionaLinguas, adicionaSegundaPagina} from "./addContent.js";
 import { filtrarFormulario } from "./filtroDeFormulario.js";
 import { salvarDados } from "./salvarDados.js";
 
+let   pagina            = 3;
 
-criarBaseDoFormulario();
+criarBaseDoFormulario(pagina);
 
-function criarBaseDoFormulario(){
-    let estadoFormulario = {
-        paginaAtual: 1, // Inicia na página 1
-        dados: {} // Objeto para armazenar os dados do formulário
-    };
+function criarBaseDoFormulario(pagina){
     const main = document.querySelector("main");
     main.innerHTML=
     `
@@ -31,64 +28,53 @@ function criarBaseDoFormulario(){
 
     </section>
     `
-    console.log(estadoFormulario);
-    exibirFormulario(estadoFormulario);
+    exibirFormulario(pagina);
 }
 
-function avancarOuRetornar(estadoFormulario){
+function avancarOuRetornar(){
     const formulario        = document.querySelector("[data-formulario]");
     const cancelar          = document.querySelector("[data-cancelar]");
-    console.log(estadoFormulario);
     
-    if(formulario){
-
-        formulario.addEventListener('submit', (dados) =>{
-            salvarDados(dados, estadoFormulario);
-            if(estadoFormulario.paginaAtual >= 3){
-                return;
-            }else{
-                estadoFormulario.paginaAtual += 1;
-                exibirFormulario(estadoFormulario);
-                recuperarInfo(estadoFormulario);
-            }
-        });
-    }
+    
+    formulario.addEventListener('submit', (dados) =>{
+        salvarDados(dados, pagina);
+        if(pagina >= 3){
+            return
+        }else{
+            pagina += 1;
+        }
+        exibirFormulario();
+        recuperarInfo();
+        
+    });
 
     cancelar.addEventListener('click', () =>{
-        if(estadoFormulario.paginaAtual === 1){
-            return;
-        }else if(estadoFormulario.paginaAtual <= 3) {
-            if(estadoFormulario.paginaAtual == 3){
-                const formImgDePerfil = document.querySelector(".fotoPerfil");
-                    formImgDePerfil.classList.remove("fotoPerfil");
-                    formImgDePerfil.innerHTML="";
-                }
-            
-            estadoFormulario.paginaAtual -= 1;
-            exibirFormulario(estadoFormulario);
-            recuperarInfo(estadoFormulario);
+        console.log(pagina);
+        if(pagina == 1){
+            return
+        }else if(pagina <= 3){
+            pagina -= 1;
+            exibirFormulario();
+            recuperarInfo();
         }
-    });
+    })
 }
 
-function exibirFormulario(estadoFormulario){
-;
-    
-    if(estadoFormulario.paginaAtual === 1 ){
-        criarPrimeiroFormulario(estadoFormulario);
-    }else if(estadoFormulario.paginaAtual === 2){
-        criarSegundoFormulario(estadoFormulario);
+function exibirFormulario(){
+    console.log(pagina);
+    if(pagina == 1 ){
+        criarPrimeiroFormulario();
+    }else if(pagina == 2){
+        criarSegundoFormulario();
     }else{
-        criarTerceiroFormulario(estadoFormulario);
+        criarTerceiroFormulario();
     }
 }
 
-
-async function criarPrimeiroFormulario(estadoFormulario){
+async function criarPrimeiroFormulario(){
     const formulario        = document.querySelector("[data-formulario]");
     const indiceFormulario  = document.querySelectorAll("[data-etapa]");
-
-
+    pagina = 1;
 
     indiceFormulario[1].classList.remove('isActive');
     formulario.innerHTML='';
@@ -145,16 +131,16 @@ async function criarPrimeiroFormulario(estadoFormulario){
 
         `;
 
-    await adicionaLinguas();
+    adicionaLinguas();
     filtrarFormulario() 
-    avancarOuRetornar(estadoFormulario);
+    avancarOuRetornar();
 }
 
-async function criarSegundoFormulario(estadoFormulario){
+async function criarSegundoFormulario(){
     const formulario        = document.querySelector("[data-formulario]");
     const indiceFormulario  = document.querySelectorAll("[data-etapa]");
 
-
+    pagina = 2;
     indiceFormulario[1].classList.add('isActive');
     formulario.innerHTML='';
     formulario.classList.remove('formularioDeInformacoesPessoais');
@@ -189,19 +175,18 @@ async function criarSegundoFormulario(estadoFormulario){
         </div>
     `
     ;
-
     adicionaSegundaPagina();
-    avancarOuRetornar(estadoFormulario);
+    avancarOuRetornar();
 }
 
-function criarTerceiroFormulario(estadoFormulario){
+function criarTerceiroFormulario(){
     const main = document.querySelector("main");
-    
-    main.innerHTML +=
+    pagina = 3;
+
+    main.innerHTML=
     `
         <section class="fotoPerfil">
             <div>
-                <button id="cancelar" data-cancelar>X</button>
                 <h2> Escolha a imagem de perfil</h2>
                 <ul>
                     <li>
@@ -211,33 +196,41 @@ function criarTerceiroFormulario(estadoFormulario){
                         <button>Usar imagem padrão</button>
                     </li>
                 </ul>
+                <button>Cancelar</button>
             </div>
         </section>
         
     `
-
-    avancarOuRetornar(estadoFormulario);
-
 }
 
-function recuperarInfo(estadoFormulario){
+function recuperarInfo(){
     let info = [];
-    console.log(estadoFormulario.paginaAtual);
-    if(estadoFormulario.paginaAtual == 1){
+    console.log(pagina);
+    if(pagina == 1){
         info  = JSON.parse(localStorage.getItem('Informações pessoais')) || [];
-    }else if(estadoFormulario.paginaAtual == 2){
+    }else if(pagina == 2){
         info  = JSON.parse(localStorage.getItem('Registro de cidadania')) || [];
+    }else{
+        return
     }
 
     const form = document.querySelectorAll(".dadosDoCampo");
 
+        Object.entries(info).forEach(([key, value]) => {
 
-    Object.entries(info).forEach(([key, value]) => {
-        form.forEach(campo => {
-            if(campo.name === key){
-                campo.value = value;
-            }
+            form.forEach(campo => {
+
+                /*if(campo.name === "lang"){
+                    
+
+                }
+                else*/ 
+                if(`${key}` == campo.name){
+                    campo.value = `${value}`;
+                }
+
+            })
+
         });
-    });
 }
 
