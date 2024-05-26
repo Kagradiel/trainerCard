@@ -7,7 +7,7 @@ criarBaseDoFormulario();
 
 function criarBaseDoFormulario(){
     let estadoFormulario = {
-        paginaAtual: 3, // Inicia na página 1
+        paginaAtual: 1, // Inicia na página 1
         dados: {} // Objeto para armazenar os dados do formulário
     };
     const main = document.querySelector("main");
