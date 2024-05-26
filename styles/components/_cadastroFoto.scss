@@ -2,7 +2,6 @@
 @use '../abstract/mixins';
 
 .fotoPerfil{
-
     height: 100vh;
     position: absolute;
     width: 100vw;
@@ -19,18 +18,20 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-around;
+        justify-content: space-between;
         box-shadow:  5px 0px 30px #9e4949,
                         -5px 0px 30px #c85555;
         h2{
             @include mixins.font-size-color(variaveis.$fonte-titulo, 1.3em, variaveis.$cor-fundo-claro);
             width: 50vw;
             text-align: center;
+            margin-top: -20vh;
         }
         ul{
             display: flex;
             gap: 8vw;
-            margin-top: -5vh;
+            margin-top: -20vh;
+            margin-bottom: 10vh;
         }
         button{
             width: 30vw;
@@ -46,6 +47,12 @@
         button:hover{
             box-shadow:  none;
         }
+        #cancelar{
+            width: 8vw;
+            height: 8vw;
+            font-weight: 800;
+            margin-top: 4vh;
+        }
     }
 }
 
@@ -55,16 +62,21 @@
         div{
             width: 55vw;
             height: 75vh;
+            h2{
+                margin-top: -15vh;
+            }
             ul{
                 margin-top: 0;
-                margin-bottom: -5vw;
+                margin-bottom: 13vh;
             }
             button{
                 font-size: .8em;
                 width: 18vw; 
             }
-            button:nth-child(3){
-                width: 10vw;
+            #cancelar{
+                width: 3vw;
+                height: 3vw;
+
             }
         }
     }
