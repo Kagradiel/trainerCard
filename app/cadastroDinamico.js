@@ -40,21 +40,27 @@ function criarBaseDoFormulario(){
 function avancarOuRetornar(estadoFormulario){
     const formulario        = document.querySelector("[data-formulario]");
     const cancelar          = document.querySelector("[data-cancelar]");
-    console.log(estadoFormulario);
-    
-    if(formulario){
+    let formularioListener  = null;
 
-        formulario.addEventListener('submit', (dados) =>{
+    if (formularioListener) {
+        formulario.removeEventListener('submit', formularioListener);
+
+    }
+
+        formularioListener = (dados) => { 
             salvarDados(dados, estadoFormulario);
             if(estadoFormulario.paginaAtual >= 3){
-                return;
+                return
             }else{
                 estadoFormulario.paginaAtual += 1;
-                exibirFormulario(estadoFormulario);
-                recuperarInfo(estadoFormulario);
             }
-        });
-    }
+            exibirFormulario(estadoFormulario);
+            recuperarInfo(estadoFormulario);
+        };
+        
+        formulario.addEventListener('submit', formularioListener);
+        
+
 
     cancelar.addEventListener('click', () =>{
         if(estadoFormulario.paginaAtual === 1){
@@ -67,14 +73,13 @@ function avancarOuRetornar(estadoFormulario){
             }
             
             estadoFormulario.paginaAtual -= 1;
-            exibirFormulario(estadoFormulario);
+            exibirFormulario(estadoFormulario, formularioListener);
             recuperarInfo(estadoFormulario);
         }
     });
 }
 
 function exibirFormulario(estadoFormulario){
-;
     
     if(estadoFormulario.paginaAtual === 1 ){
         criarPrimeiroFormulario(estadoFormulario);
@@ -83,10 +88,11 @@ function exibirFormulario(estadoFormulario){
     }else{
         criarTerceiroFormulario(estadoFormulario);
     }
+    avancarOuRetornar(estadoFormulario);
 }
 
 
-async function criarPrimeiroFormulario(estadoFormulario){
+async function criarPrimeiroFormulario(){
     const formulario        = document.querySelector("[data-formulario]");
     const indiceFormulario  = document.querySelectorAll("[data-etapa]");
 
@@ -149,10 +155,10 @@ async function criarPrimeiroFormulario(estadoFormulario){
 
     await adicionaLinguas();
     filtrarFormulario() 
-    avancarOuRetornar(estadoFormulario);
+    
 }
 
-async function criarSegundoFormulario(estadoFormulario){
+async function criarSegundoFormulario(){
     const formulario        = document.querySelector("[data-formulario]");
     const indiceFormulario  = document.querySelectorAll("[data-etapa]");
 
@@ -193,10 +199,10 @@ async function criarSegundoFormulario(estadoFormulario){
     ;
 
     adicionaSegundaPagina();
-    avancarOuRetornar(estadoFormulario);
+    
 }
 
-function criarTerceiroFormulario(estadoFormulario){
+function criarTerceiroFormulario(){
     const sectionImgPerfil = document.querySelector("[data-foto]");
     sectionImgPerfil.classList.add("fotoPerfil");
     sectionImgPerfil.innerHTML +=
@@ -215,7 +221,7 @@ function criarTerceiroFormulario(estadoFormulario){
             </div>
     `
 
-    avancarOuRetornar(estadoFormulario);
+   
 
 }
 
