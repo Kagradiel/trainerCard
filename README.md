@@ -21,7 +21,7 @@
     <p>Delete your account</p>
   </li>
   <li>
-    <h3>Plus should be:</h3>
+    <h3>Additionally, it should be:</h3>
     <p>Responsive</p>
     <p>SPA</p>
     <p>Upgradeable</p>
